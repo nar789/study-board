@@ -1,0 +1,136 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>message ui freeboard</title>
+    <link rel="stylesheet"  href="/assets/css/bootstrap.min.css" />
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5"> 
+        <a href="/">
+            <div class="row justify-content-center mb-5">
+                <div class="col-12 text-center"><h2>MessageUI x Web Free board</h2></div>
+            </div>
+        </a>
+
+        
+        <% if(data) { %>
+            <div class="row">
+                <input type="hidden" id="id" value="<%=data.id%>">
+                <div class="mb-3">
+                    <label for="data_title" class="form-label">제목</label>
+                    <input type="text" class="form-control" id="data_title" placeholder="제목을 입력해주세요." value="<%=data.title%>">
+                </div>
+                <div class="mb-3">
+                    <label for="data_name" class="form-label">작성자</label>
+                    <input type="text" class="form-control" id="data_name" placeholder="이름을 입력해주세요." value="<%=data.name%>">
+                </div>
+                <div class="mb-3">
+                    <label for="data_content" class="form-label">본문</label>
+                    <textarea class="form-control" id="data_content" rows="10" placeholder="내용을 입력해주세요."><%=data.title%></textarea>
+                </div>
+                <div class="row justify-content-between mt-5">
+                    <div class="col-4 text-center btn btn-secondary mr-3" id="update_btn">편집</div>
+                    <div class="col-4 text-center btn btn-danger" id="del_btn">삭제</div>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="row">
+                <div class="mb-3">
+                    <label for="title" class="form-label">제목</label>
+                    <input type="text" class="form-control" id="title" placeholder="제목을 입력해주세요.">
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">작성자</label>
+                    <input type="text" class="form-control" id="name" placeholder="이름을 입력해주세요.">
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">본문</label>
+                    <textarea class="form-control" id="content" rows="10" placeholder="내용을 입력해주세요."></textarea>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <div class="col-8 text-center btn btn-success" id="write_btn">
+                        작성완료
+                    </div>
+                </div>
+                
+            </div>
+        <% } %>
+        
+    </div>
+    
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/jquery.min.js"></script>
+    <script>
+        function init() {
+            $('#write_btn').click(()=> {
+                write();
+            });
+            $('#update_btn').click(()=> {
+                update();
+            });
+            $('#del_btn').click(()=> {
+                del();
+            });
+            
+        }
+
+        function update() {
+            const id = $('#id').val();
+            const name = $('#data_name').val();
+            const title = $('#data_title').val();
+            const content = $('#data_content').val();
+            $.post('api/update', {
+                id : id, 
+                name : name,
+                title : title,
+                content : content,
+            }, (data, status) => {
+                if(data === "success") {
+                    alert('수정완료');
+                }
+            });
+
+        }
+
+        function del() {
+            const id = $('#id').val();
+            $.post('api/delete', {
+                id : id, 
+            }, (data, status) => {
+                if(data === "success") {
+                    alert('삭제완료');
+                    location.replace('/');
+                }
+            });
+        }
+
+        function write() {
+            const name = $('#name').val();
+            const title = $('#title').val();
+            const content = $('#content').val();
+            $.post('api/write', {
+                name : name,
+                title : title,
+                content : content,
+            }, (data, status) => {
+                if(data === "success") {
+                    alert('작성완료');
+                    location.replace('/');
+                }
+            });
+        }
+
+
+        init();
+
+        
+        
+
+        
+    </script>
+</body>
+
+</html>
