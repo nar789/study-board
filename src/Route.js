@@ -4,14 +4,10 @@
 
 		const app = _g.app;
 		const mysql = _g.mysql;
+		const config = require('../config');
 
 		function getConn() {
-			return mysql.createConnection({
-				host : 'localhost',
-				user : 'root',
-				password : 'black',
-				database : 'msgui'
-			});
+			return mysql.createConnection(config);
 		}
 
 		function route() {
